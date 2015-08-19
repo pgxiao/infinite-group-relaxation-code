@@ -17,6 +17,7 @@ load("survey_examples.sage")
 load("simple_extremality_test.sage")
 load("quasi_periodic.sage")
 load("extreme_functions_mlr_cpl3.sage")
+load("irrational_moves.sage")
 #load("old_walk_and_stability_interval_code.sage")
 
 load("bug_examples.sage")
