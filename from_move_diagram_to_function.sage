@@ -69,10 +69,21 @@ def normal_interval(a, b):
         return [a, b]
 
 def generate_components(f, bkpts):
+    """
+    EXAMPLES::
+
+        sage: c = generate_components(4/5, [0, 15/100, 30/100, 50/100, 65/100, 80/100, 85/100, 95/100, 1])
+        sage: c
+        [[[0, 3/20], [13/20, 4/5]],
+         [[3/20, 3/10], [1/2, 13/20]],
+         [[3/10, 1/2]],
+         [[4/5, 17/20], [19/20, 1]],
+         [[17/20, 19/20]]]
+    """
     n = len(bkpts)
     f_index = bkpts.index(f)
-    left_components = [[bkpts[i], bkpts[f_index-i]] for i in range (0, (f_index+1)/2)]
-    right_components =  [[bkpts[f_index + i], bkpts[n-1-i]] for i in range (0, (n-f_index)/2)]
+    left_components = [[[bkpts[i], bkpts[i+1]], [bkpts[f_index-i-1], bkpts[f_index-i]]] if i != f_index-i-1 else [[bkpts[i], bkpts[i+1]]] for i in range (0, (f_index+1)/2)]
+    right_components =  [[[bkpts[f_index + i], bkpts[f_index + i + 1]], [bkpts[n-2-i], bkpts[n-1-i]]] if (f_index + i) != n-2-i else [[bkpts[f_index + i], bkpts[f_index + i + 1]]] for i in range (0, (n-f_index)/2)]
     return left_components + right_components
 
 def proof_only_bkpts_from_uncovered_interval_gives_empty_polytope():
@@ -89,7 +100,7 @@ def proof_only_bkpts_from_uncovered_interval_gives_empty_polytope():
     bkpts = moves_to_faces(bhk)
     f = 4/5
     components = generate_components(f, bkpts)
-    p = generate_polytope(f, [components],[], field=None)
+    p = generate_polytope(f, components,[], field=None)
     return p
 
 p = proof_only_bkpts_from_uncovered_interval_gives_empty_polytope()
